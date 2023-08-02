@@ -8,11 +8,7 @@ import NotFound from "./NotFound";
 function App() {
   const savedDataString = localStorage.getItem("my-cart" || {});
   const savedData = JSON.parse(savedDataString);
-  console.log("saved data is ", savedData)
-  const [count, setCount] = useState(0);
-  function handleCountChange() {
-    setCount(count + 1);
-  }
+  console.log("saved data is ", savedData);
 
   const [cart, setCart] = useState(savedData);
   function handleAddToCart(productId, count) {
@@ -27,12 +23,6 @@ function App() {
   }, 0);
   return (
     <>
-      <button
-        className="bg-primary-dark px-2 py-1 text-white"
-        onClick={handleCountChange}
-      >
-        Change Count
-      </button>
       <div className="bg-gray-200 h-screen overflow-y-scroll flex flex-col">
         <NavBar productCount={totalCount} />
         <div className="grow">
