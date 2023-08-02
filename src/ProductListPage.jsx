@@ -43,21 +43,23 @@ function ProductListPage() {
   }
   return (
     <div className="p-2 max-w-6xl mx-auto bg-white py-12.5 my-16">
-      <input
-        value={query}
-        onChange={handleQueryChange}
-        placeholder="Search"
-        className="bg-gray-50 border border-gray-300 mb-2 rounded-md"
-      />
-      <select
-        value={sort}
-        onChange={handleSortChange}
-        className="bg-gray-50 border border-gray-300 ml-2 rounded-md"
-      >
-        <option value="dafault">Default sort</option>
-        <option value="name">Sort by title</option>
-        <option value="price">Sort by price</option>
-      </select>
+      <div className="flex justify-around mb-4">
+        <input
+          value={query}
+          onChange={handleQueryChange}
+          placeholder="Search"
+          className="bg-gray-50 border border-gray-300 rounded-md"
+        />
+        <select
+          value={sort}
+          onChange={handleSortChange}
+          className="bg-gray-50 border border-gray-300 rounded-md"
+        >
+          <option value="dafault">Default sort</option>
+          <option value="name">Sort by title</option>
+          <option value="price">Sort by price</option>
+        </select>
+      </div>
       <div>
         {data.length > 0 && <ProductList products={data} />}
         {data.length == 0 && <NoMatching>No Matching Found</NoMatching>}
