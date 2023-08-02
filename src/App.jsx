@@ -8,8 +8,7 @@ import NotFound from "./NotFound";
 function App() {
   const savedDataString = localStorage.getItem("my-cart" || {});
   const savedData = JSON.parse(savedDataString);
-  console.log("saved data is ", savedData);
-
+  
   const [cart, setCart] = useState(savedData);
   function handleAddToCart(productId, count) {
     const oldCount = cart[productId] || 0;
