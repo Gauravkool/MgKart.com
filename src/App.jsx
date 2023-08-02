@@ -5,6 +5,7 @@ import ProductDetail from "./ProductDetail";
 import NavBar from "./NavBar";
 import Footer from "./Footer";
 import NotFound from "./NotFound";
+import Signup from "./Signup";
 function App() {
   const savedDataString = localStorage.getItem("my-cart" || {});
   const savedData = JSON.parse(savedDataString);
@@ -32,6 +33,7 @@ function App() {
               element={<ProductDetail addToCart={handleAddToCart} />}
             />
             <Route path="*" element={<NotFound />} />
+            <Route path="signup" element={<Signup />} />
           </Routes>
         </div>
         <Footer />
