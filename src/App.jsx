@@ -36,7 +36,7 @@ function App() {
               element={<ProductDetail addToCart={handleAddToCart} />}
             />
             <Route path="*" element={<NotFound />} />
-            <Route path="/cart" element={<CartPage cart={cart}/>} />
+            <Route path="/cart" element={<CartPage cart={cart} updateCart={setCart}/>} />
             <Route path="login" element={<LogIn />} />
             <Route path="signup" element={<Signup />} />
             <Route path="forgotpassword" element={<ForgotPassword />} />
