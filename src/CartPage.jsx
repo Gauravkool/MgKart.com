@@ -5,17 +5,28 @@ import Loading from "./Loading";
 function CartPage({ cart, updateCart }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [localCart, setLocalCart] = useState(cart);
   const productIds = Object.keys(cart);
-  console.log("products outside", products);
-  useEffect(function () {
-    const myProductsPromises = productIds.map(function (id) {
-      return getProductData(id);
-    });
-    Promise.all(myProductsPromises).then(function (products) {
-      setProducts(products);
-      setLoading(false);
-    });
-  }, [cart]);
+  
+  console.log(localCart)
+  useEffect(
+    function () {
+      setLocalCart(cart);
+    },
+    [cart]
+  );
+  useEffect(
+    function () {
+      const myProductsPromises = productIds.map(function (id) {
+        return getProductData(id);
+      });
+      Promise.all(myProductsPromises).then(function (products) {
+        setProducts(products);
+        setLoading(false);
+      });
+    },
+    [cart]
+  );
 
   function handleRemove(e) {
     const productId = e.currentTarget.getAttribute("productid");
@@ -28,9 +39,18 @@ function CartPage({ cart, updateCart }) {
     setLoading(true);
   }
 
-  function handleChange() {
-    console.log("handle change called");
+  function handleChange(e) {
+    const newValue = +e.target.value;
+    const productId = e.target.getAttribute("productId");
+    console.log("newValue", " productid", newValue, productId);
+    const newLocalCart = { ...localCart, [productId]: newValue };
+    setLocalCart(newLocalCart);
   }
+
+  function handleUpdateCart() {
+    updateCart(localCart);
+  }
+
   if (loading) {
     return <Loading />;
   }
@@ -41,7 +61,8 @@ function CartPage({ cart, updateCart }) {
           <div key={p.id}>
             {p.title}
             <input
-              value={cart[p.id]}
+              productid={p.id}
+              value={localCart[p.id]}
               type="number"
               onChange={handleChange}
               className="w-12 p-1 border border-gray-200 rounded-md mx-2"
@@ -52,6 +73,12 @@ function CartPage({ cart, updateCart }) {
           </div>
         );
       })}
+      <button
+        className="bg-indigo-700"
+        onClick={handleUpdateCart}
+      >
+        Update cart
+      </button>
     </div>
   );
 }
