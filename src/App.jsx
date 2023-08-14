@@ -9,6 +9,7 @@ import Signup from "./Signup";
 import CartPage from "./CartPage";
 import LogIn from "./LogIn";
 import ForgotPassword from "./ForgotPassword";
+import Test from "./Test";
 function App() {
   const savedDataString = localStorage.getItem("my-cart" || "{}");
   const savedData = JSON.parse(savedDataString);
@@ -17,14 +18,14 @@ function App() {
   function handleAddToCart(productId, count) {
     const oldCount = cart[productId] || 0;
     const newCart = { ...cart, [productId]: oldCount + count };
-    updateCart(newCart)
+    updateCart(newCart);
   }
 
-function updateCart (newCart){
-  setCart(newCart);
-  const cartString = JSON.stringify(newCart);
-  localStorage.setItem("my-cart", cartString);
-} 
+  function updateCart(newCart) {
+    setCart(newCart);
+    const cartString = JSON.stringify(newCart);
+    localStorage.setItem("my-cart", cartString);
+  }
   const totalCount = Object.keys(cart).reduce(function (previous, current) {
     return previous + cart[current];
   }, 0);
@@ -40,10 +41,14 @@ function updateCart (newCart){
               element={<ProductDetail addToCart={handleAddToCart} />}
             />
             <Route path="*" element={<NotFound />} />
-            <Route path="/cart" element={<CartPage cart={cart} updateCart={updateCart}/>} />
+            <Route
+              path="/cart"
+              element={<CartPage cart={cart} updateCart={updateCart} />}
+            />
             <Route path="login" element={<LogIn />} />
             <Route path="signup" element={<Signup />} />
             <Route path="forgotpassword" element={<ForgotPassword />} />
+            <Route path="test" element={<Test />} />
           </Routes>
         </div>
         <Footer />
