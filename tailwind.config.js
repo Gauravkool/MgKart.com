@@ -4,6 +4,9 @@ module.exports = {
   content: ["./index.html", "./src/**/*.jsx"],
   theme: {
     extend: {
+      margin: {
+        43: "172px",
+      },
       padding: {
         12.5: "50px",
       },
