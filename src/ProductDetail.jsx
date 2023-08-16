@@ -4,6 +4,7 @@ import { HiArrowLeft, HiArrowRight } from "react-icons/hi2";
 import Loading from "./Loading";
 import { getProductData } from "./API";
 import NotFound from "./NotFound";
+import Button from "./Button";
 
 function ProductDetail({ addToCart }) {
   const id = +useParams().id;
@@ -16,6 +17,7 @@ function ProductDetail({ addToCart }) {
         .then((product) => {
           setProduct(product);
           setLoading(false);
+          setCount(1)
         })
         .catch(function () {
           setLoading(false);
@@ -56,12 +58,7 @@ function ProductDetail({ addToCart }) {
           className="border border-gray-500 rounded-md w-14 px-2 "
           type="number"
         />
-        <button
-          onClick={handleButtonClick}
-          className="bg-primary-default text-white px-2 py-1 rounded-md hover:bg-primary-light ml-2"
-        >
-          Add to Cart
-        </button>
+        <Button onClick={handleButtonClick}>Add to Cart</Button>
       </div>
       <div className="flex justify-between px-6 mt-4">
         <div>

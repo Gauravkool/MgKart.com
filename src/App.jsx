@@ -33,7 +33,7 @@ function App() {
     <>
       <div className="bg-gray-200 h-screen overflow-y-scroll flex flex-col">
         <NavBar productCount={totalCount} />
-        <div className="grow">
+        <div className="grow p-10">
           <Routes>
             <Route index element={<ProductListPage />} />
             <Route
