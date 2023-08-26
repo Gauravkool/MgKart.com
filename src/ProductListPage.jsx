@@ -5,12 +5,18 @@ import { getProductList } from "./API";
 import Loading from "./Loading";
 import Button from "./Button";
 import range from "lodash.range";
+import { Link, useSearchParams } from "react-router-dom";
 function ProductListPage() {
   const [productData, setProductData] = useState();
-  const [query, setQuery] = useState("");
-  const [sort, setSort] = useState("default");
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const params = Object.fromEntries([...searchParams]);
+  let { sort, query, page } = params;
+  page = page || 1;
+  query = query || "";
+  sort = sort || "default";
+
   useEffect(
     function () {
       let sortBy;
@@ -32,10 +38,13 @@ function ProductListPage() {
   );
 
   function handleQueryChange(e) {
-    setQuery(e.target.value);
+    setSearchParams(
+      { ...params, query: e.target.value, page: 1 },
+      { replace: false }
+    );
   }
   function handleSortChange(e) {
-    setSort(e.target.value);
+    setSearchParams({ ...params, sort: e.target.value }, { replace: false });
   }
 
   if (loading) {
@@ -72,8 +81,17 @@ function ProductListPage() {
         </div>
       </div>
       <div className="flex">
-        {range(1, productData.meta.last_page + 1).map((item) => (
-          <Button key={item} onClick={() => setPage(item)}>{item}</Button>
+        {range(1, productData.meta.last_page + 1).map((pageNo) => (
+          <Link
+            className={
+              "py-1 px-2 m-1 " +
+              (pageNo == page ? "bg-primary-light" : "bg-primary-default")
+            }
+            key={pageNo}
+            to={"?" + new URLSearchParams({ ...params, page: pageNo })}
+          >
+            {pageNo}
+          </Link>
         ))}
       </div>
     </>
