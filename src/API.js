@@ -27,6 +27,6 @@ export function getProductList(sortBy, search, page, sortType) {
       params,
     })
     .then(function (response) {
-      return response.data.data;
+      return response.data;
     });
 }

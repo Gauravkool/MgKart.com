@@ -4,9 +4,9 @@ import NoMatching from "./NoMatching";
 import { getProductList } from "./API";
 import Loading from "./Loading";
 import Button from "./Button";
-
+import range from "lodash.range";
 function ProductListPage() {
-  const [productList, setProductList] = useState([]);
+  const [productData, setProductData] = useState();
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState("default");
   const [loading, setLoading] = useState(true);
@@ -23,8 +23,8 @@ function ProductListPage() {
         sortBy = "price";
         sortType = "desc";
       }
-      getProductList(sortBy, query, page, sortType).then((products) => {
-        setProductList(products);
+      getProductList(sortBy, query, page, sortType).then((body) => {
+        setProductData(body);
         setLoading(false);
       });
     },
@@ -63,16 +63,18 @@ function ProductListPage() {
           </select>
         </div>
         <div>
-          {productList.length > 0 && <ProductList products={productList} />}
-          {productList.length == 0 && (
+          {productData.data.length > 0 && (
+            <ProductList products={productData.data} />
+          )}
+          {productData.data.length == 0 && (
             <NoMatching>No Matching Found</NoMatching>
           )}
         </div>
       </div>
       <div className="flex">
-        <Button onClick={() => setPage(1)}>1</Button>
-        <Button onClick={() => setPage(2)}>2</Button>
-        <Button onClick={() => setPage(3)}>3</Button>
+        {range(1, productData.meta.last_page + 1).map((item) => (
+          <Button key={item} onClick={() => setPage(item)}>{item}</Button>
+        ))}
       </div>
     </>
   );
