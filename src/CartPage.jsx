@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { getProductData } from "./API";
-import { AiOutlineCloseCircle } from "react-icons/ai";
+import { getProductsByIds } from "./API";
+
 import Loading from "./Loading";
 import CartList from "./CartList";
 function CartPage({ cart, updateCart }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const productIds = Object.keys(cart);
-
   useEffect(
     function () {
       setLoading(true);
-      const myProductsPromises = productIds.map(function (id) {
-        return getProductData(id);
-      });
-      Promise.all(myProductsPromises).then(function (products) {
+      const productIds = Object.keys(cart);
+      getProductsByIds(productIds).then(function (products) {
         setProducts(products);
         setLoading(false);
       });

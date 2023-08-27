@@ -7,9 +7,13 @@ import Footer from "./Footer";
 import NotFound from "./NotFound";
 import Signup from "./Signup";
 import CartPage from "./CartPage";
-import LogIn from "./LogIn";
+import Login from "./LogIn";
 import ForgotPassword from "./ForgotPassword";
 import Test from "./Test";
+import AlertProvider from "./Providers/AlertProvider";
+import UserProvider from "./Providers/UserProvider";
+import AuthRoute from "./AuthRoute";
+import UserRoute from "./UserRoute";
 function App() {
   const savedDataString = localStorage.getItem("my-cart" || "{}");
   const savedData = JSON.parse(savedDataString);
@@ -31,28 +35,46 @@ function App() {
   }, 0);
   return (
     <>
-      <div className="bg-gray-200 h-screen overflow-y-scroll flex flex-col">
-        <NavBar productCount={totalCount} />
-        <div className="grow p-10">
-          <Routes>
-            <Route index element={<ProductListPage />} />
-            <Route
-              path="/products/:id"
-              element={<ProductDetail addToCart={handleAddToCart} />}
-            />
-            <Route path="*" element={<NotFound />} />
-            <Route
-              path="/cart"
-              element={<CartPage cart={cart} updateCart={updateCart} />}
-            />
-            <Route path="login" element={<LogIn />} />
-            <Route path="signup" element={<Signup />} />
-            <Route path="forgotpassword" element={<ForgotPassword />} />
-            <Route path="test" element={<Test />} />
-          </Routes>
-        </div>
-        <Footer />
-      </div>
+      <UserProvider>
+        <AlertProvider>
+          <div className="bg-gray-200 h-screen overflow-y-scroll flex flex-col">
+            <NavBar productCount={totalCount} />
+            <div className="grow p-10">
+              <Routes>
+                <Route
+                  index
+                  element={
+                    <UserRoute>
+                      <ProductListPage />
+                    </UserRoute>
+                  }
+                />
+                <Route
+                  path="/products/:id"
+                  element={<ProductDetail addToCart={handleAddToCart} />}
+                />
+                <Route path="*" element={<NotFound />} />
+                <Route
+                  path="/cart"
+                  element={<CartPage cart={cart} updateCart={updateCart} />}
+                />
+                <Route
+                  path="login"
+                  element={
+                    <AuthRoute>
+                      <Login />
+                    </AuthRoute>
+                  }
+                />
+                <Route path="signup" element={<Signup />} />
+                <Route path="forgotpassword" element={<ForgotPassword />} />
+                <Route path="test" element={<Test />} />
+              </Routes>
+            </div>
+            <Footer />
+          </div>
+        </AlertProvider>
+      </UserProvider>
     </>
   );
 }
