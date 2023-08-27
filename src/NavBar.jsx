@@ -1,6 +1,7 @@
 import React from "react";
 import { RiShoppingBagLine } from "react-icons/Ri";
-function NavBar({ productCount }) {
+import { withCart } from "./WithProvider";
+function NavBar({ cartCount }) {
   return (
     <div className="py-4 bg-white">
       <div className="max-w-6xl mx-auto h-16 flex justify-between">
@@ -9,10 +10,10 @@ function NavBar({ productCount }) {
           <span className="text-5xl text-primary-default">
             <RiShoppingBagLine />
           </span>
-          <span className="-m-7">{productCount}</span>
+          <span className="-m-7">{cartCount}</span>
         </div>
       </div>
     </div>
   );
 }
-export default NavBar;
+export default withCart(NavBar);

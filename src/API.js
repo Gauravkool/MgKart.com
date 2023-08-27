@@ -37,3 +37,26 @@ export function getProductList(sortBy, search, page, sortType) {
       return response.data;
     });
 }
+
+export const saveCart = (cart) => {
+  return axios
+    .post(
+      "https://myeasykart.codeyogi.io/carts",
+      { data: cart },
+      {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      }
+    )
+    .then((res) => res.data); 
+};
+export const getCart = () => {
+  return axios
+    .get("https://myeasykart.codeyogi.io/carts", {
+      headers: {
+        Authorization: localStorage.getItem("token"),
+      },
+    })
+    .then((res) => res.data);
+};

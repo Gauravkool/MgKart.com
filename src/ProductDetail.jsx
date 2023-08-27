@@ -5,8 +5,9 @@ import Loading from "./Loading";
 import { getProductData } from "./API";
 import NotFound from "./NotFound";
 import Button from "./Button";
+import { withCart } from "./WithProvider";
 
-function ProductDetail({ addToCart }) {
+function ProductDetail({addToCart }) {
   const id = +useParams().id;
   const [product, setProduct] = useState();
   const [loading, setLoading] = useState(true);
@@ -75,4 +76,4 @@ function ProductDetail({ addToCart }) {
     </div>
   );
 }
-export default ProductDetail;
+export default withCart(ProductDetail);

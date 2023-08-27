@@ -1,29 +1,35 @@
 import React, { useEffect, useState } from "react";
 import CartRow from "./CartRow";
 import Button from "./Button";
+import { withCart } from "./WithProvider";
 
-function CartList({ products, cart, updateCart }) {
-  const [localCart, setLocalCart] = useState(cart);
+function CartList({ cart, updateCart }) {
+  const [quantityMap, setQuantityMap] = useState({});
   useEffect(
     function () {
-      setLocalCart(cart);
+      const map = cart.reduce(
+        (m, cartItem) => ({
+          ...m,
+          [cartItem.product.id]: cartItem.quantity,
+        }),
+        {}
+      );
+      setQuantityMap(map);
     },
     [cart]
   );
   function handleQuantityChange(productId, newValue) {
     console.log("newValue", " productid", newValue, productId);
-    const newLocalCart = { ...localCart, [productId]: newValue };
-    setLocalCart(newLocalCart);
+    const newQuantityMap = { ...quantityMap, [productId]: newValue };
+    setQuantityMap(newQuantityMap);
   }
   function handleUpadteCartClick() {
-    updateCart(localCart);
+    const newcart = cart.map((item) => ({ ...item, quantity: quantityMap[item.product.id] }));
+    updateCart(newcart);
   }
   function handleRemove(productId) {
-    const newCart = { ...cart };
-    console.log("before cart", newCart);
-    delete newCart[productId];
+    const newCart = cart.filter((item) => item.product.id === productId);
     updateCart(newCart);
-    console.log("after cart", newCart);
   }
   return (
     <div>
@@ -33,12 +39,12 @@ function CartList({ products, cart, updateCart }) {
         <span className="font-bold w-32">Quantity</span>
         <span className="font-bold w-20">Subtotal</span>
       </div>
-      {products.map(function (p) {
+      {cart.map((cartItem) => {
         return (
           <CartRow
-            key={p.id}
-            product={p}
-            quantity={localCart[p.id]}
+            key={cartItem.product.id}
+            product={cartItem.product}
+            quantity={quantityMap[cartItem.product.id]}
             handleQuantityChange={handleQuantityChange}
             onRemove={handleRemove}
           />
@@ -50,4 +56,4 @@ function CartList({ products, cart, updateCart }) {
     </div>
   );
 }
-export default CartList;
+export default withCart(CartList);

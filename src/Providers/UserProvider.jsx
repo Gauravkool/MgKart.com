@@ -29,7 +29,7 @@ function UserProvider({ children }) {
   }
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{isLoggedIn : !!token, user, setUser }}>
       {children}
     </UserContext.Provider>
   );
