@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { CartContext } from "../Contexts";
 import { withCart } from "../WithProvider";
 import { getCart, getProductsByIds, saveCart } from "../API";
-function CartProvider({ isLoggedIn, user, children }) {
+function CartProvider({ isLoggedIn, children }) {
   const [cart, setCart] = useState([]);
   console.log("cart is cartProvier", cart);
   useEffect(
@@ -14,30 +14,42 @@ function CartProvider({ isLoggedIn, user, children }) {
       } else {
         const savedDataString = localStorage.getItem("my-cart" || "{}");
         const savedData = JSON.parse(savedDataString);
-        getProductsByIds(Object.keys(savedData)).then((products) => {
-          const savedCart = products.map((p) => ({
-            product: p,
-            quantity: savedData[p.id],
-          }));
-          setCart(savedCart);
-        });
+        quantityMapTocart(savedData)
       }
     },
     [isLoggedIn]
   );
+
+  function quantityMapTocart(quantityMap) {
+    getProductsByIds(Object.keys(quantityMap)).then((products) => {
+      const savedCart = products.map((p) => ({
+        product: p,
+        quantity: quantityMap[p.id],
+      }));
+      setCart(savedCart);
+    });
+  }
   function addToCart(productId, count) {
-    const oldCount = cart[productId] || 0;
-    const newCart = { ...cart, [productId]: oldCount + count };
+    const quantityMap = cart.reduce(
+      (m, cartItem) => ({
+        ...m,
+        [cartItem.product.id]: cartItem.quantity,
+      }),
+      {}
+    );
+    const oldCount = quantityMap[productId] || 0;
+    const newCart = { ...quantityMap, [productId]: oldCount + count };
     updateCart(newCart);
   }
 
-  function updateCart(newCart) {
-    setCart(newCart);
+  function updateCart(quantityMap) {
     if (isLoggedIn) {
-      saveCart(newCart);
+      saveCart(quantityMap);
+      quantityMapTocart(quantityMap)
     } else {
-      const cartString = JSON.stringify(newCart);
-      localStorage.setItem("my-cart", cartString);
+      const quantityMapString = JSON.stringify(quantityMap);
+      localStorage.setItem("my-cart", quantityMapString);
+      quantityMapTocart(quantityMap)
     }
   }
   const cartCount = cart.reduce(function (previous, current) {

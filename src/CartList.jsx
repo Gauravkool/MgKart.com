@@ -5,31 +5,31 @@ import { withCart } from "./WithProvider";
 
 function CartList({ cart, updateCart }) {
   const [quantityMap, setQuantityMap] = useState({});
+  const cartToQuantityMap = () =>
+    cart.reduce(
+      (m, cartItem) => ({
+        ...m,
+        [cartItem.product.id]: cartItem.quantity,
+      }),
+      {}
+    );
   useEffect(
     function () {
-      const map = cart.reduce(
-        (m, cartItem) => ({
-          ...m,
-          [cartItem.product.id]: cartItem.quantity,
-        }),
-        {}
-      );
-      setQuantityMap(map);
+      setQuantityMap(cartToQuantityMap);
     },
     [cart]
   );
   function handleQuantityChange(productId, newValue) {
-    console.log("newValue", " productid", newValue, productId);
     const newQuantityMap = { ...quantityMap, [productId]: newValue };
     setQuantityMap(newQuantityMap);
   }
   function handleUpadteCartClick() {
-    const newcart = cart.map((item) => ({ ...item, quantity: quantityMap[item.product.id] }));
-    updateCart(newcart);
+    updateCart(quantityMap);
   }
   function handleRemove(productId) {
-    const newCart = cart.filter((item) => item.product.id === productId);
-    updateCart(newCart);
+    const newQuantityMap = cartToQuantityMap;
+    delete newQuantityMap[productId];
+    updateCart(newQuantityMap);
   }
   return (
     <div>
