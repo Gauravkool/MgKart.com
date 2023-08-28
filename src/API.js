@@ -49,7 +49,9 @@ export const saveCart = (cart) => {
         },
       }
     )
-    .then((res) => res.data); 
+    .then(function (response) {
+      return response.data;
+    });
 };
 export const getCart = () => {
   return axios
@@ -58,5 +60,7 @@ export const getCart = () => {
         Authorization: localStorage.getItem("token"),
       },
     })
-    .then((res) => res.data);
+    .then(function (response) {
+      return response.data;
+    });
 };

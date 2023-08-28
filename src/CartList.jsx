@@ -4,7 +4,8 @@ import Button from "./Button";
 import { withCart } from "./WithProvider";
 
 function CartList({ cart, updateCart }) {
-  const [quantityMap, setQuantityMap] = useState({});
+  const [quantityMap, setQuantityMap] = useState();
+
   const cartToQuantityMap = () =>
     cart.reduce(
       (m, cartItem) => ({
@@ -13,7 +14,7 @@ function CartList({ cart, updateCart }) {
       }),
       {}
     );
-  useEffect(
+  useEffect( 
     function () {
       setQuantityMap(cartToQuantityMap);
     },
@@ -27,7 +28,7 @@ function CartList({ cart, updateCart }) {
     updateCart(quantityMap);
   }
   function handleRemove(productId) {
-    const newQuantityMap = cartToQuantityMap;
+    const newQuantityMap = cartToQuantityMap();
     delete newQuantityMap[productId];
     updateCart(newQuantityMap);
   }
@@ -44,7 +45,7 @@ function CartList({ cart, updateCart }) {
           <CartRow
             key={cartItem.product.id}
             product={cartItem.product}
-            quantity={quantityMap[cartItem.product.id]}
+            quantity={quantityMap[cartItem.product.id]|| cartItem.quantity}
             handleQuantityChange={handleQuantityChange}
             onRemove={handleRemove}
           />

@@ -4,7 +4,6 @@ import { withCart } from "../WithProvider";
 import { getCart, getProductsByIds, saveCart } from "../API";
 function CartProvider({ isLoggedIn, children }) {
   const [cart, setCart] = useState([]);
-  console.log("cart is cartProvier", cart);
   useEffect(
     function () {
       if (isLoggedIn) {
@@ -14,7 +13,8 @@ function CartProvider({ isLoggedIn, children }) {
       } else {
         const savedDataString = localStorage.getItem("my-cart" || "{}");
         const savedData = JSON.parse(savedDataString);
-        quantityMapTocart(savedData)
+        quantityMapTocart(savedData);
+        console.log("savedDta", savedData);
       }
     },
     [isLoggedIn]
@@ -44,12 +44,14 @@ function CartProvider({ isLoggedIn, children }) {
 
   function updateCart(quantityMap) {
     if (isLoggedIn) {
-      saveCart(quantityMap);
-      quantityMapTocart(quantityMap)
+      saveCart(quantityMap).then(function (res) {
+        // setCart(res)
+        quantityMapTocart(quantityMap);
+      });
     } else {
       const quantityMapString = JSON.stringify(quantityMap);
       localStorage.setItem("my-cart", quantityMapString);
-      quantityMapTocart(quantityMap)
+      quantityMapTocart(quantityMap);
     }
   }
   const cartCount = cart.reduce(function (previous, current) {
